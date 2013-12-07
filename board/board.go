@@ -1,6 +1,7 @@
 package board
 
 import (
+	"fmt"
 	"hackathon/driver"
 	"hackathon/ncscreen"
 )
@@ -23,17 +24,17 @@ func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
 		PenDown:         penDown,
 		screen: ncscreen.Screen{
 			Size: ncscreen.Coords{
-				X: 1,
-				Y: 1,
+				X: .9625,
+				Y: .508,
 			},
 			Motors: []ncscreen.Coords{
 				ncscreen.Coords{
 					X: 0,
-					Y: 0,
+					Y: -.2286,
 				},
 				ncscreen.Coords{
-					X: 1,
-					Y: 1,
+					X: .9625,
+					Y: -.2286,
 				},
 			},
 		},
@@ -65,5 +66,9 @@ func (b *Board) MoveTo(position ncscreen.Coords) {
 
 	b.connection.MoveRelativeDouble(motor1move, motor2move)
 
+	fmt.Printf("I'm at %s\n", b.CurrentPosition)
+
 	b.CurrentPosition = position
+
+	fmt.Printf("I'm moving to %s\n", b.CurrentPosition)
 }

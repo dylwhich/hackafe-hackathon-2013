@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"hackathon/board"
 	"hackathon/ncscreen"
-	"hackathon/text"
+//	"hackathon/text"
 	"os"
 )
 
@@ -40,7 +40,7 @@ func main() {
 		}
 	}
 
-	theFont, err := text.LoadFont("text/font.json")
+/*	theFont, err := text.LoadFont("text/font.json")
 
 	if err != nil {
 		fmt.Printf("Unable to load font: %s", err.Error())
@@ -52,5 +52,5 @@ func main() {
 		fmt.Printf("Writing \"%s\" at %s\n", str, strCoord)
 
 		writer.Write(strCoord, str)
-	}
+	}*/
 }

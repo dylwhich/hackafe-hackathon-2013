@@ -19,13 +19,13 @@ func (l *Line) Split(pieces int) []Line {
 
 	for i := 0; i < pieces; i++ {
 		result[i] = Line{
-			Start: Coords{
-				X: i * dx * math.Cos(theta),
-				Y: i * dy * math.Sin(theta),
+			Start: ncscreen.Coords{
+				X: float64(i) * dx * math.Cos(theta),
+				Y: float64(i) * dy * math.Sin(theta),
 			},
-			End: Coords{
-				X: (i + 1) * dx * math.Cos(theta),
-				Y: (i + 1) * dy * math.Sin(theta),
+			End: ncscreen.Coords{
+				X: (float64(i) + 1.0) * dx * math.Cos(theta),
+				Y: (float64(i) + 1.0) * dy * math.Sin(theta),
 			},
 		}
 	}

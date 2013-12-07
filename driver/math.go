@@ -9,7 +9,7 @@ const (
 	RadiansPerStep = math.Pi / 100
 
 	// MotorRadius is dependent on the motors used on the board.
-	MotorRadius = 0.06 // 6 cm
+	MotorRadius = 0.004 // 6 cm
 
 	// MotorSteps is the number of steps per turn.
 	MotorSteps = 200
