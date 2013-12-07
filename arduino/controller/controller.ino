@@ -61,7 +61,7 @@ void loop(){
        nums[0] = Serial.read();
        nums[1] = Serial.read();
              
-       int numSteps = *((int*)nums);
+       int numSteps = *((int*)nums);//Serial.parseInt();
        
        stepmotor(motorNum, numSteps);
      }
@@ -74,8 +74,8 @@ void loop(){
        nums[2] = Serial.read();
        nums[3] = Serial.read();
        
-       int motor1dist = *((int*)nums);
-       int motor2dist = *((int*)(nums+2));
+       int motor1dist = /*Serial.parseInt();//*/ *((int*)nums);
+       int motor2dist = /*Serial.parseInt();//*/ *((int*)(nums+2));
        
        signed char motor1dir = sign(motor1dist);
        signed char motor2dir = sign(motor2dist);
@@ -92,6 +92,12 @@ void loop(){
            
            motor1dist = max(motor1dist - onepertwo, 0);
            motor2dist = max(motor2dist - 1, 0);
+           
+           Serial.print("motor1dist: ");
+           Serial.println(motor1dist);
+           
+           Serial.print("motor2dist: ");
+           Serial.println(motor2dist);
          }
        }
        else{
