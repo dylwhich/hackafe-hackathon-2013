@@ -41,18 +41,19 @@ func TestStepSingleReal(t *testing.T) {
 	}
 
 	t.Logf("Testing single step 400 times, motor 0\n")
-	c.StepSingle(byte(0), int16(400))
+	c.MoveRelativeSingle(0, 400)
 
 	t.Logf("Testing single step 400 times, motor 1\n")
-	c.StepSingle(byte(1), int16(400))
+	c.MoveRelativeSingle(1, 400)
 
 	t.Logf("Testing single step -400 times, motor 0\n")
-	c.StepSingle(byte(0), int16(-400))
+	c.MoveRelativeSingle(0, -400)
 
 	t.Logf("Testing single step -400 times, motor 1\n")
-	c.StepSingle(byte(1), int16(-400))
+	c.MoveRelativeSingle(1, -400)
 }
 
+/*
 func TestStepSingleLeft(t *testing.T) {
 	c, err := Connect("/dev/ttyUSB0")
 	if err != nil {
@@ -71,3 +72,4 @@ func TestDoubleStepUp(t *testing.T) {
 
 	c.StepDouble(int16(-800), int16(-800))
 }
+*/
