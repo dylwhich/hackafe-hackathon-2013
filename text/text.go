@@ -5,6 +5,7 @@ import (
 	"hackathon/ncscreen"
 	"math"
 	"strings"
+	"fmt"
 )
 
 type BoundingBox struct {
@@ -25,21 +26,25 @@ func (box *BoundingBox) Size() (width float64, height float64) {
 // Writes the string to the coordinates, regardless of anything except
 // out-of-bounds-ness
 func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
+	text = strings.ToUpper(text)
 	println(writer.font)
 	for _, char := range text {
 		if char == ' ' {
-			c.X += writer.fWidth + .2
+			c.X += 1.2 * writer.fWidth
 		} else {
 			glyph := writer.font.GetGlyph(char)
 			for _, line := range glyph.Lines {
-				line.Start.X += c.X
-				line.End.X += c.X
-				line.Start.Y += c.Y
-				line.End.Y += c.Y
+				if line != nil {
+				line.Start.X = c.X + line.Start.X * writer.fWidth
+				line.End.X = c.X + line.End.X * writer.fWidth
+				line.Start.Y = c.Y + line.Start.Y * writer.fHeight
+				line.End.Y = c.Y + line.End.Y * writer.fHeight
+				fmt.Printf("Line %s %s\n", line.Start, line.End)
 
 				writer.target.DrawLine(line)
+}
 			}
-			c.X += writer.fWidth + .1
+			c.X += 1.1 * writer.fWidth
 		}
 	}
 }

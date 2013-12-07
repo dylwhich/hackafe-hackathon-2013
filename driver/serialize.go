@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"github.com/tarm/goserial"
 	"io"
+	"time"
 )
 
 const (
@@ -55,6 +56,7 @@ func (c *Connection) stepDouble(firstSteps int16, secondSteps int16) {
 	c.rwc.Write([]byte("i"))
 	binary.Write(c.rwc, binary.LittleEndian, firstSteps)
 	binary.Write(c.rwc, binary.LittleEndian, secondSteps)
+	time.Sleep(time.Second * time.Duration(firstSteps / 90 * 3))
 }
 
 
