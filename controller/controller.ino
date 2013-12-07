@@ -5,9 +5,10 @@
 
 #define degPerStep 1.8
 #define distPerDeg 1
+#define numSteps 200
 
 // the pins for controlling each motor
-const byte motorpins[][] = {{2,3,4,5},{6,7,8,9}};
+const byte motorpins[numMotors][numPins] = {{2,3,4,5},{6,7,8,9}};
 
 // current step positions of each motor.
 byte currentstep[] = {0, 0};
@@ -34,16 +35,16 @@ void loop(){
 void stepMotor(int motornumber, int steps) {
  // We want to move forward if the number is positive
  // we want to move backward if the number is negative
- if(steps >= pincount) {
-   digitalWrite(motorpins[motornumber][currentpins[motornumber]],LOW]
+ if(steps >= 0) {
+   digitalWrite(motorpins[motornumber][currentstep[motornumber]],LOW);
    currentstep[motornumber] += 1;
-   currentStep[motornumber] %= pincount;
-   digitalWrite(motoirpins[motornumber][currentpins[motornumber]],HIGH]
+   currentstep[motornumber] %= numPins;
+   digitalWrite(motorpins[motornumber][currentstep[motornumber]],HIGH);
  
- } else if(steps <= pincount) {
-   digialWrite(motorPins[motornumber][currentpins[motornumber]],LOW]
+ } else if(steps <= 0) {
+   digitalWrite(motorpins[motornumber][currentstep[motornumber]],LOW);
    currentstep[motornumber] -= 1;
-   currentstep[motornumber] %= pincount;
-   digialWrite(motorPins[motornumber][currentpins[motornumber]],HIGH]
+   currentstep[motornumber] %= numPins;
+   digitalWrite(motorpins[motornumber][currentstep[motornumber]],HIGH);
  }
 }
