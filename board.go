@@ -1,15 +1,15 @@
 package board
 
 import (
-	"hackathon/ncscreen"
 	"hackathon/driver"
+	"hackathon/ncscreen"
 )
 
 type Board struct {
 	CurrentPosition ncscreen.Coords
-	PenDown bool
-	screen ncscreen.Screen
-	connection *driver.Connection
+	PenDown         bool
+	screen          ncscreen.Screen
+	connection      *driver.Connection
 }
 
 func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
@@ -18,11 +18,11 @@ func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
 		return nil, err
 	}
 
-	result := &Board {
+	result := &Board{
 		CurrentPosition: position,
-		PenDown: penDown,
+		PenDown:         penDown,
 		screen: ncscreen.Screen{
-			Size: ncscreen.Coords {
+			Size: ncscreen.Coords{
 				X: 1,
 				Y: 1,
 			},
@@ -43,22 +43,21 @@ func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
 	return result, nil
 }
 
-func (b *Board) SetPenDown(penDown bool){
+func (b *Board) SetPenDown(penDown bool) {
 	if penDown ^ b.PenDown {
 		b.PenDown = penDown
 		if penDown {
 			b.connection.DropPen()
-		}
-		else {
+		} else {
 			b.connection.RaisePen()
 		}
 	}
 }
 
-func (b *Board) MoveTo(position ncscreen.Coords){
+func (b *Board) MoveTo(position ncscreen.Coords) {
 	var currentDists, targetDists []float64
 	currentDists = b.screen.Lengths(b.CurrentPosition)
-	
+
 	targetDists = b.screen.Lengths(position)
 
 	motor1move := targetDists[0] - currentDists[0]
