@@ -18,10 +18,10 @@ const (
 // TurnsIn converts an arbitrary distance to a number of complete
 // turns required.
 func TurnsIn(meters float64) int {
-	return (2 * math.Pi) * (meters / MotorRadius)
+	return int((2 * math.Pi) * (meters / MotorRadius))
 }
 
 // Steps converts a number of turns to a number of steps.
-func Steps(turns int) {
+func Steps(turns int) int {
 	return MotorSteps * turns
 }
