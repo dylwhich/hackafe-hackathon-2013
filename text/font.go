@@ -2,7 +2,6 @@ package text
 
 import (
 	"encoding/json"
-	"errors"
 	"hackathon/board"
 	"hackathon/ncscreen"
 	"os"
@@ -12,6 +11,11 @@ type Glyph struct {
 	Lines     []*board.Line
 	Character rune
 	Joining   bool
+}
+
+type TmpChar map[string]struct {
+	X []float64 `json:"x"`
+	Y []float64 `json:"y"`
 }
 
 type Font map[rune]Glyph
@@ -33,7 +37,7 @@ func LoadFont(fileName string) (result *Font, err error) {
 	}
 	defer file.Close()
 
-	v := make(map[string]interface{}, 0)
+	v := make(TmpChar, 0)
 	err = json.NewDecoder(file).Decode(&v)
 	if err != nil {
 		print("Unable to decode json: " + err.Error())
@@ -43,26 +47,17 @@ func LoadFont(fileName string) (result *Font, err error) {
 	font := make(Font, len(v))
 
 	for key, val := range v {
-		obj, ok := val.(map[string][]float64)
-		if !ok {
-			return nil, errors.New("Could not cast to map[string][]float64 at key " + key)
-		}
-
-		if len(obj["x"]) != len(obj["y"]) {
-			panic("Glyph " + key + " has incompatible lengths")
-		}
-
-		lines := make([]*board.Line, 0)
+		lines := make([]*board.Line, len(val.X))
 		lineNum := 0
 
 		lastX := -1.0
 		lastY := -1.0
-		for i := 0; i < len(obj["x"]); i++ {
-			x := obj["x"][i]
-			y := obj["y"][i]
+		for i := 0; i < len(val.X); i++ {
+			x := val.X[i]
+			y := val.Y[i]
 
-			if x != -1 && y != -1 {
-				if lastX != -1 && lastY != -1 {
+			if x != -1.0 && y != -1.0 {
+				if lastX != -1.0 && lastY != -1.0 {
 					lines[lineNum] = &board.Line{
 						Start: ncscreen.Coords{
 							X: lastX,
@@ -90,5 +85,5 @@ func LoadFont(fileName string) (result *Font, err error) {
 		}
 	}
 
-	return &font, nil
+	return nil, nil
 }
