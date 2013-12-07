@@ -29,13 +29,29 @@ func Connect(device string) (c *Connection, err error) {
 	return
 }
 
-func (c *Connection) StepSingle(motorIndex byte, stepCount int16) {
+// MoveRelativeSingle serializes instructions to the controller to
+// move an arbitrary motor the given distance in meters. It does not
+// block.
+func (c *Connection) MoveRelativeSingle(motorIndex int, distance float64) {
+	c.stepSingle(byte(motorIndex), int16(Steps(TurnsIn(distance))))
+}
+
+// MoveRelativeDouble serializes instructions to the controller to
+// move the first and second motors the first and second distances in
+// meters, respectively. It does not block.
+func (c *Connection) MoveRelativeDouble(first, second float64) {
+	firstSteps := Steps(TurnsIn(first))
+	secondSteps := Steps(TurnsIn(second))
+	c.stepDouble(int16(firstSteps), int16(secondSteps))
+}
+
+func (c *Connection) stepSingle(motorIndex byte, stepCount int16) {
 	c.rwc.Write([]byte("t"))
 	c.rwc.Write([]byte{motorIndex})
 	binary.Write(c.rwc, binary.LittleEndian, stepCount)
 }
 
-func (c *Connection) StepDouble(firstSteps int16, secondSteps int16) {
+func (c *Connection) stepDouble(firstSteps int16, secondSteps int16) {
 	c.rwc.Write([]byte("i"))
 	binary.Write(c.rwc, binary.LittleEndian, firstSteps)
 	binary.Write(c.rwc, binary.LittleEndian, secondSteps)
