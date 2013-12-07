@@ -1,11 +1,11 @@
 package text
 
 import (
+	"fmt"
 	"hackathon/board"
 	"hackathon/ncscreen"
 	"math"
 	"strings"
-	"fmt"
 )
 
 type BoundingBox struct {
@@ -33,16 +33,22 @@ func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
 			c.X += 1.2 * writer.fWidth
 		} else {
 			glyph := writer.font.GetGlyph(char)
-			for _, line := range glyph.Lines {
+			for _, line := range linesCopy {
 				if line != nil {
-				line.Start.X = c.X + line.Start.X * writer.fWidth
-				line.End.X = c.X + line.End.X * writer.fWidth
-				line.Start.Y = c.Y + line.Start.Y * writer.fHeight
-				line.End.Y = c.Y + line.End.Y * writer.fHeight
-				fmt.Printf("Line %s %s\n", line.Start, line.End)
+					newLine := &board.Line{
+						Start: {
+							X: c.X + line.Start.X*writer.fWidth,
+							Y: c.Y + line.Start.Y*writer.fHeight,
+						},
+						End: {
+							X: c.X + line.End.X*writer.fWidth,
+							Y: c.Y + line.End.Y*writer.fHeight,
+						},
+					}
+					fmt.Printf("Line %s %s\n", newLine.Start, newLine.End)
 
-				writer.target.DrawLine(line)
-}
+					writer.target.DrawLine(newLine)
+				}
 			}
 			c.X += 1.1 * writer.fWidth
 		}
