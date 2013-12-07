@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"hackathon/board"
 	"hackathon/ncscreen"
+	"hackathon/text"
 	"os"
 )
 
@@ -37,5 +38,18 @@ func main() {
 		if b != nil {
 			b.DrawLine(line)
 		}
+	}
+
+	theFont, err := text.LoadFont("text/font.json")
+	if err != nil {
+		fmt.Printf("Unable to load font: %s", err.Error())
+	} else {
+		writer := text.NewTextWriter(theFont, 1/39.3701, 1/39.3701, b)
+
+		str := "Hello World!"
+		strCoord := ncscreen.Coords{0.5, 0.5}
+		fmt.Printf("Writing \"%s\" at %s\n", str, strCoord)
+
+		writer.Write(strCoord, str)
 	}
 }

@@ -26,16 +26,20 @@ func (box *BoundingBox) Size() (width float64, height float64) {
 // out-of-bounds-ness
 func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
 	for _, char := range text {
-		glyph := writer.font.GetGlyph(char)
-		for _, line := range glyph.Lines {
-			line.Start.X += c.X
-			line.End.X += c.X
-			line.Start.Y += c.Y
-			line.End.Y += c.Y
+		if char == ' ' {
+			c.X += writer.fWidth + .2
+		} else {
+			glyph := writer.font.GetGlyph(char)
+			for _, line := range glyph.Lines {
+				line.Start.X += c.X
+				line.End.X += c.X
+				line.Start.Y += c.Y
+				line.End.Y += c.Y
 
-			writer.target.DrawLine(line)
+				writer.target.DrawLine(line)
+			}
+			c.X += writer.fWidth + .1
 		}
-		c.X += writer.fWidth + .1
 	}
 }
 
