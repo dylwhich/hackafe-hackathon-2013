@@ -5,33 +5,52 @@
 
 #define turnMotor 't'
 #define interlace 'i'
+#define raisePen 'u'
+#define lowerPen 'd'
+
+#define penDown 0
+#define penUp 65
+
+#include <Servo.h>
 
 const byte motor1pins[] = {2,3,4,5};
 const byte motor2pins[] = {6,7,8,9};
+const byte penMotor = 11;
 const byte* motorpins[] = {motor1pins, motor2pins};
 
 byte motorstep[] = {0, 0};
 
+Servo penServo;
+
 void setup(){
   Serial.begin(9600);
-  
+  penServo.attach(penMotor);
+  penServo.write(penUp);
   for(byte motor = 0; motor < numMotors; motor++){
     for(byte pin = 0; pin < numPins; pin++){
       pinMode(motorpins[motor][pin], OUTPUT);
-      
-      if(motorstep[motor] == pin) digitalWrite(motorpins[motor][pin], HIGH);
-      else digitalWrite(motorpins[motor][pin], LOW);
+      digitalWrite(motorpins[motor][pin], LOW);
     }
   }
 }
 
 void loop(){
-  stepmotor(1, 800);
-  stepmotor(1, -800);
   
-  if(false && Serial.available()){
+  if(true && Serial.available()){
      char marker = Serial.read();
      
+     if(marker == raisePen){
+       for (int pos = penDown; pos < penUp; pos += 1){
+         penServo.write(pos);
+         delay(10);
+       }
+     }
+     if(marker == lowerPen) {
+       for (int pos = penUp; pos > penDown; pos += -1){
+         penServo.write(pos);
+         delay(10);
+       }
+     }
      if(marker == turnMotor){
        // wait for 3 bytes: 1 for a motor number, 2 for a number of turns
        while(Serial.available() < 3);
@@ -87,6 +106,12 @@ void loop(){
          }
        }
      }
+  for(byte motor = 0; motor < numMotors; motor++){
+    for(byte pin = 0; pin < numPins; pin++){
+      pinMode(motorpins[motor][pin], OUTPUT);
+      digitalWrite(motorpins[motor][pin], LOW);
+    }
+  }
   }
 }
 
