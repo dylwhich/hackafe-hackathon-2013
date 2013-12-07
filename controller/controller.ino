@@ -1,50 +1,59 @@
-// number of pins to control a motor.
 #define numPins 4
-// number of motors available
 #define numMotors 2
 
-#define degPerStep 1.8
-#define distPerDeg 1
-#define numSteps 200
+const byte motor1pins[] = {2,3,4,5};
+const byte motor2pins[] = {6,7,8,9};
+const byte* motorPins[] = {motor1pins, motor2pins};
 
-// the pins for controlling each motor
-const byte motorpins[numMotors][numPins] = {{2,3,4,5},{6,7,8,9}};
-
-// current step positions of each motor.
-byte currentstep[] = {0, 0};
+byte motorstep[] = {0, 0};
 
 void setup(){
-  for(byte i = 0; i < numMotors; i++){
-    for(byte k = 0; i < numPins; k++){
-      pinMode(motorpins[i][k], OUTPUT);
-      
-      if(currentstep[i] == k){
-        digitalWrite(motorpins[i][k], HIGH);
-      }
-      else { 
-        digitalWrite(motorpins[i][k], LOW);
-      }
+  for(byte motor = 0; motor < numMotors; motor++){
+    for(byte pin = 0; pin < numPins; pin++){
+      pinMode(motorPins[motor][pin], OUTPUT);
     }
   }
 }
 
 void loop(){
- 
+  stepmotor1(200);
+  stepmotor1(-200);
 }
 
-void stepMotor(int motornumber, int steps) {
- // We want to move forward if the number is positive
- // we want to move backward if the number is negative
- if(steps >= 0) {
-   digitalWrite(motorpins[motornumber][currentstep[motornumber]],LOW);
-   currentstep[motornumber] += 1;
-   currentstep[motornumber] %= numPins;
-   digitalWrite(motorpins[motornumber][currentstep[motornumber]],HIGH);
- 
- } else if(steps <= 0) {
-   digitalWrite(motorpins[motornumber][currentstep[motornumber]],LOW);
-   currentstep[motornumber] -= 1;
-   currentstep[motornumber] %= numPins;
-   digitalWrite(motorpins[motornumber][currentstep[motornumber]],HIGH);
- }
+void stepmotor1(int numSteps){
+  for(int i = 0; i < abs(numSteps); i++){
+    if(numSteps > 0){
+      digitalWrite(motor1pins[motor1step], LOW);
+      motor1step += 1;
+      if(motor1step >= numPins) motor1step = 0;
+      digitalWrite(motor1pins[motor1step], HIGH);
+    }
+    else{
+      digitalWrite(motor1pins[motor1step], LOW);
+      motor1step -= 1;
+      if(motor1step >= numPins) motor1step = numPins - 1;
+      digitalWrite(motor1pins[motor1step], HIGH);
+    }
+    
+    delay(5);
+  }
+}
+
+void stepmotor2(int numSteps){
+  for(int i = 0; i < abs(numSteps); i++){
+    if(numSteps > 0){
+      digitalWrite(motor2pins[motor2step], LOW);
+      motor2step += 1;
+      if(motor2step >= numPins) motor2step = 0;
+      digitalWrite(motor2pins[motor2step], HIGH);
+    }
+    else{
+      digitalWrite(motor2pins[motor2step], LOW);
+      motor2step -= 1;
+      if(motor2step >= numPins) motor2step = numPins - 1;
+      digitalWrite(motor2pins[motor2step], HIGH);
+    }
+    
+    delay(5);
+  }
 }
