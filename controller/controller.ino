@@ -1,7 +1,7 @@
 #define numPins 4
 #define numMotors 2
 #define stepDelay 10
-#define sign(X) (X < 0 ? -1 : X > 0 1 : 0)
+#define sign(X) (X < 0 ? -1 : X > 0 ? 1 : 0)
 
 #define turnMotor 't'
 #define interlace 'i'
@@ -26,7 +26,10 @@ void setup(){
 }
 
 void loop(){
-  if(Serial.available()){
+  stepmotor(1, 800);
+  stepmotor(1, -800);
+  
+  if(false && Serial.available()){
      char marker = Serial.read();
      
      if(marker == turnMotor){
@@ -36,9 +39,10 @@ void loop(){
        byte motorNum = Serial.read();
        
        byte nums[2];
-       Serial.readBytes(nums, 2);
-       
-       int numSteps = *nums;
+       nums[0] = Serial.read();
+       nums[1] = Serial.read();
+             
+       int numSteps = *((int*)nums);
        
        stepmotor(motorNum, numSteps);
      }
@@ -46,34 +50,37 @@ void loop(){
        while(Serial.available() < 4);
        
        byte nums[4];
-       Serial.readBytes(nums, 4);
+       nums[0] = Serial.read();
+       nums[1] = Serial.read();
+       nums[2] = Serial.read();
+       nums[3] = Serial.read();
        
-       int motor1dist = *nums;
-       int motor2dist = *(nums + 2);
+       int motor1dist = *((int*)nums);
+       int motor2dist = *((int*)(nums+2));
        
-       byte motor1dir = sign(motor1dist);
-       byte motor2dir = sign(motor2dist);
+       signed char motor1dir = sign(motor1dist);
+       signed char motor2dir = sign(motor2dist);
        
        motor1dist = abs(motor1dist);
        motor2dist = abs(motor2dist);
        
        if(motor1dist > motor2dist){         
-         onepertwo = motor1dist/motor2dist;
+         int onepertwo = motor1dist/motor2dist;
          
          while(motor1dist > 0 || motor2dist > 0){
-           stepmotor(0, min(motor1dist, onepertwo) * motor1dir;
-           stepmotor(1, min(1, motor2dist) * motor2dir;
+           stepmotor(0, min(motor1dist, onepertwo) * motor1dir);
+           stepmotor(1, min(1, motor2dist) * motor2dir);
            
            motor1dist = max(motor1dist - onepertwo, 0);
            motor2dist = max(motor2dist - 1, 0);
          }
        }
        else{
-         twoperone = motor2dist/motor1dist;
+         int twoperone = motor2dist/motor1dist;
          
          while(motor1dist > 0 || motor2dist > 0){
-           stepmotor(1, min(motor2dist, twoperone) * motor2dir;
-           stepmotor(0, min(1, motor1dist) * motor1dir;
+           stepmotor(1, min(motor2dist, twoperone) * motor2dir);
+           stepmotor(0, min(1, motor1dist) * motor1dir);
            
            motor2dist = max(motor2dist - twoperone, 0);
            motor1dist = max(motor1dist - 1, 0);
