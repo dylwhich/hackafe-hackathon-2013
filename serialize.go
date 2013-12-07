@@ -1,38 +1,35 @@
 package driver
 
 import (
+	"encoding/binary"
 	"github.com/tarm/goserial"
 	"io"
-	"unsafe"
 )
 
-
 type Connection struct {
-	inner io.ReadWriteCloser
+	rwc io.ReadWriteCloser
 }
 
-func Connect() (*Connection, error) {
-	c0 := &serial.Config{Name:"/dev/ttyUSB0", Baud: 9600}
+func Connect() (c *Connection, err error) {
+	c = &Connection{}
+	c0 := &serial.Config{Name: "/dev/ttyUSB0", Baud: 9600}
 
-	in, e := serial.OpenPort(c0)
-
-	if e != nil {
-		return nil, e
+	c.rwc, err = serial.OpenPort(c0)
+	if err != nil {
+		return nil, err
 	}
 
-	connection := &Connection{inner: in}
-
-	return connection, nil
+	return
 }
 
 func (c *Connection) TurnSingle(motorIndex byte, stepCount int16) {
-	c.inner.Write([]byte('t'))
-	c.inner.Write([]byte(motorIndex))
-	c.inner.Write([]byte(stepCount))
+	c.rwc.Write([]byte("t"))
+	c.rwc.Write([]byte{motorIndex})
+	binary.Write(c.rwc, binary.LittleEndian, stepCount)
 }
 
-func (c *Connection) TurnDouble(firstMotorStepCount int16, secondMotorStepCount int16){
-	c.inner.Write([]byte('i'))
-	c.inner.Write([]byte(firstMotorStepCount))
-	c.inner.Write([]byte(secondMotorStepCount))
+func (c *Connection) TurnDouble(firstSteps int16, secondSteps int16) {
+	c.rwc.Write([]byte("i"))
+	binary.Write(c.rwc, binary.LittleEndian, firstMotorStepCount)
+	binary.Write(c.rwc, binary.LittleEndian, secondMotorStepCount)
 }
