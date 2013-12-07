@@ -2,7 +2,6 @@ package board
 
 import (
 	"hackathon/ncscreen"
-	"math"
 )
 
 type Line struct {
@@ -15,22 +14,17 @@ func (l *Line) Split(pieces int) []Line {
 	dy := l.End.Y - l.Start.Y
 	dx := l.End.X - l.Start.X
 
-	length := ncscreen.Distance(l.Start, l.End) / float64(pieces)
+	length := ncscreen.Distance(l.Start, l.End)
 
-	theta := math.Atan2(dy, dx)
+	normVector := ncscreen.Coords{dx / length, dy / length}
 
 	for i := 0; i < pieces; i++ {
 		result[i] = Line{
-			Start: ncscreen.Coords{
-				X: l.Start.X + float64(i)*length*math.Cos(theta),
-				Y: l.Start.Y + float64(i)*length*math.Sin(theta),
-			},
-			End: ncscreen.Coords{
-				X: l.Start.X + float64(i+1)*length*math.Cos(theta),
-				Y: l.Start.Y + float64(i+1)*length*math.Sin(theta),
-			},
+			Start: ncscreen.Add(l.Start, ncscreen.Coords{normVector.X * float64(i), normVector.Y * float64(i)}),
+			End:   ncscreen.Add(l.Start, ncscreen.Coords{normVector.X * float64(i+1), normVector.Y * float64(i+1)}),
 		}
 	}
+
 	return result
 }
 
