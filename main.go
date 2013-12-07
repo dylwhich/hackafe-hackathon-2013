@@ -47,7 +47,7 @@ func main() {
 	} else {
 		writer := text.NewTextWriter(theFont, 1/39.3701, 1.5*1/39.3701, b)
 
-		str := "L3E7 HAXX!\n "
+		str := "HELLO, WORLD!\n "
 		strCoord := ncscreen.Coords{0.43, 0.2286}
 		fmt.Printf("Writing \"%s\" at %s\n", str, strCoord)
 

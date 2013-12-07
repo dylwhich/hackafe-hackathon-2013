@@ -33,14 +33,14 @@ func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
 			c.X += 1.2 * writer.fWidth
 		} else {
 			glyph := writer.font.GetGlyph(char)
-			for _, line := range linesCopy {
+			for _, line := range glyph.Lines {
 				if line != nil {
 					newLine := &board.Line{
-						Start: {
+						Start: ncscreen.Coords{
 							X: c.X + line.Start.X*writer.fWidth,
 							Y: c.Y + line.Start.Y*writer.fHeight,
 						},
-						End: {
+						End: ncscreen.Coords{
 							X: c.X + line.End.X*writer.fWidth,
 							Y: c.Y + line.End.Y*writer.fHeight,
 						},
