@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Try to open a connection to the board.
-	b, err := board.NewBoard(ncscreen.Coords{0.5, 0.5}, false)
+	b, err := board.NewBoard(ncscreen.Coords{0.43, 0.2286}, false)
 	if err != nil {
 		fmt.Printf("Could not connect to board: %s\n", err)
 		//return
