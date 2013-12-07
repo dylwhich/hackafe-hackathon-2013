@@ -7,11 +7,12 @@ import (
 
 type Board struct {
 	CurrentPosition ncscreen.Coords
+	PenDown bool
 	screen ncscreen.Screen
 	connection *driver.Connection
 }
 
-func NewBoard(position ncscreen.Coords) (*Board, error) {
+func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
 	conn, err := driver.Connect("/dev/ttyUSB0")
 	if err != nil {
 		return nil, err
@@ -19,6 +20,7 @@ func NewBoard(position ncscreen.Coords) (*Board, error) {
 
 	result := &Board {
 		CurrentPosition: position,
+		PenDown: penDown,
 		screen: ncscreen.Screen{
 			Size: ncscreen.Coords {
 				X: 1,
@@ -41,6 +43,18 @@ func NewBoard(position ncscreen.Coords) (*Board, error) {
 	return result, nil
 }
 
+func (b *Board) SetPenDown(penDown bool){
+	if penDown ^ b.PenDown {
+		b.PenDown = penDown
+		if penDown {
+			b.connection.DropPen()
+		}
+		else {
+			b.connection.RaisePen()
+		}
+	}
+}
+
 func (b *Board) MoveTo(position ncscreen.Coords){
 	var currentDists, targetDists []float64
 	currentDists = b.screen.Lengths(b.CurrentPosition)
@@ -51,4 +65,6 @@ func (b *Board) MoveTo(position ncscreen.Coords){
 	motor2move := targetDists[1] - currentDists[1]
 
 	b.connection.StepDouble(motor1move, motor2move)
+
+	b.CurrentPosition = positon
 }
