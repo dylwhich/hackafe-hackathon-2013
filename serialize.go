@@ -56,3 +56,12 @@ func (c *Connection) stepDouble(firstSteps int16, secondSteps int16) {
 	binary.Write(c.rwc, binary.LittleEndian, firstSteps)
 	binary.Write(c.rwc, binary.LittleEndian, secondSteps)
 }
+
+
+func (c *Connection) PenDown(){
+	c.rwc.Write([]byte("d"))
+}
+
+func (c *Connection) PenUp(){
+	c.rwc.Write([]byte("u"))
+}
