@@ -15,7 +15,7 @@ func (l *Line) Split(pieces int) []Line {
 	dy := l.End.Y - l.Start.Y
 	dx := l.End.X - l.Start.X
 
-	length := ncscreen.Distance(l.Start, l.End) / pieces
+	length := ncscreen.Distance(l.Start, l.End) / float64(pieces)
 
 	theta := math.Atan2(dy, dx)
 
