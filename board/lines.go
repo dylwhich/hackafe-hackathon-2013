@@ -22,12 +22,12 @@ func (l *Line) Split(pieces int) []Line {
 	for i := 0; i < pieces; i++ {
 		result[i] = Line{
 			Start: ncscreen.Coords{
-				X: float64(i) * length * math.Cos(theta),
-				Y: float64(i) * length * math.Sin(theta),
+				X: l.Start.X + float64(i)*length*math.Cos(theta),
+				Y: l.Start.Y + float64(i)*length*math.Sin(theta),
 			},
 			End: ncscreen.Coords{
-				X: float64(i+1) * length * math.Cos(theta),
-				Y: float64(i+1) * length * math.Sin(theta),
+				X: l.Start.X + float64(i+1)*length*math.Cos(theta),
+				Y: l.Start.Y + float64(i+1)*length*math.Sin(theta),
 			},
 		}
 	}
