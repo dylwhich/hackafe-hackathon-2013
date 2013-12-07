@@ -6,13 +6,20 @@ import (
 	"io"
 )
 
+const (
+	Baud = 9600
+)
+
 type Connection struct {
 	rwc io.ReadWriteCloser
 }
 
-func Connect() (c *Connection, err error) {
+func Connect(device string) (c *Connection, err error) {
 	c = &Connection{}
-	c0 := &serial.Config{Name: "/dev/ttyUSB0", Baud: 9600}
+	c0 := &serial.Config{
+		Name: device,
+		Baud: Baud,
+	}
 
 	c.rwc, err = serial.OpenPort(c0)
 	if err != nil {
@@ -22,14 +29,14 @@ func Connect() (c *Connection, err error) {
 	return
 }
 
-func (c *Connection) TurnSingle(motorIndex byte, stepCount int16) {
+func (c *Connection) StepSingle(motorIndex byte, stepCount int16) {
 	c.rwc.Write([]byte("t"))
 	c.rwc.Write([]byte{motorIndex})
 	binary.Write(c.rwc, binary.LittleEndian, stepCount)
 }
 
-func (c *Connection) TurnDouble(firstSteps int16, secondSteps int16) {
+func (c *Connection) StepDouble(firstSteps int16, secondSteps int16) {
 	c.rwc.Write([]byte("i"))
-	binary.Write(c.rwc, binary.LittleEndian, firstMotorStepCount)
-	binary.Write(c.rwc, binary.LittleEndian, secondMotorStepCount)
+	binary.Write(c.rwc, binary.LittleEndian, firstSteps)
+	binary.Write(c.rwc, binary.LittleEndian, secondSteps)
 }
