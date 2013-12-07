@@ -29,20 +29,20 @@ func (l *Line) Split(pieces int) []Line {
 }
 
 func (b *Board) DrawLine(l *Line) {
-	for _, segment := range l.Split(50) {
-		// First, make sure that there we don't draw where we don't mean
-		// to.
-		b.SetPenDown(false)
+	//for _, segment := range l.Split(50) {
+	// First, make sure that there we don't draw where we don't mean
+	// to.
+	b.SetPenDown(false)
 
-		// Find the nearest end of the line and move the marker to there.
-		near, far := segment.FindNearerTo(b.CurrentPosition)
-		b.MoveTo(near)
+	// Find the nearest end of the line and move the marker to there.
+	near, far := l.FindNearerTo(b.CurrentPosition)
+	b.MoveTo(near)
 
-		// Draw the line.
-		b.SetPenDown(true)
-		b.MoveTo(far)
-		b.SetPenDown(false)
-	}
+	// Draw the line.
+	b.SetPenDown(true)
+	b.MoveTo(far)
+	b.SetPenDown(false)
+	//}
 }
 
 func (l *Line) FindNearerTo(c ncscreen.Coords) (near, far ncscreen.Coords) {
