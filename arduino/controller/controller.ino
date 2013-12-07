@@ -92,12 +92,6 @@ void loop(){
            
            motor1dist = max(motor1dist - onepertwo, 0);
            motor2dist = max(motor2dist - 1, 0);
-           
-           Serial.print("motor1dist: ");
-           Serial.println(motor1dist);
-           
-           Serial.print("motor2dist: ");
-           Serial.println(motor2dist);
          }
        }
        else{
