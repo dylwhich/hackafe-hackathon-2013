@@ -35,7 +35,7 @@ func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
 
 			writer.target.DrawLine(line)
 		}
-		c.X += writer.fWidth
+		c.X += writer.fWidth + .1
 	}
 }
 
