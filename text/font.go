@@ -24,17 +24,19 @@ func (f Font) GetGlyph(c rune) Glyph {
 	return result
 }
 
-func LoadFont(fileName string) *Font {
+func LoadFont(fileName string) (result *Font, err error) {
 	file, err := os.Open(fileName)
 	if err != nil {
-		panic("Error opening " + fileName + ": " + err.Error())
+		print("Error opening " + fileName + ": " + err.Error())
+		return nil, err
 	}
 	defer file.Close()
 
 	v := make(map[string]interface{}, 0)
 	err = json.NewDecoder(file).Decode(v)
 	if err != nil {
-		panic("Unable to decode json: " + err.Error())
+		print("Unable to decode json: " + err.Error())
+		return nil, err
 	}
 
 	font := make(Font, len(v))
@@ -87,5 +89,5 @@ func LoadFont(fileName string) *Font {
 		}
 	}
 
-	return &font
+	return &font, nil
 }

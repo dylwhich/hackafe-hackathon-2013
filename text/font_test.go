@@ -5,8 +5,12 @@ import (
 )
 
 func TestLoadFont(t *testing.T) {
-	result := LoadFont("font.json")
+	result, err := LoadFont("font.json")
+	if err != nil {
+		t.Fail()
+	}
+
 	if result != nil {
-		print("Success?")
+		print("Success!")
 	}
 }
