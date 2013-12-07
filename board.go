@@ -44,12 +44,12 @@ func NewBoard(position ncscreen.Coords, penDown bool) (*Board, error) {
 }
 
 func (b *Board) SetPenDown(penDown bool) {
-	if penDown ^ b.PenDown {
+	if penDown != b.PenDown {
 		b.PenDown = penDown
 		if penDown {
-			b.connection.DropPen()
+			b.connection.PenDown()
 		} else {
-			b.connection.RaisePen()
+			b.connection.PenUp()
 		}
 	}
 }
@@ -63,7 +63,7 @@ func (b *Board) MoveTo(position ncscreen.Coords) {
 	motor1move := targetDists[0] - currentDists[0]
 	motor2move := targetDists[1] - currentDists[1]
 
-	b.connection.StepDouble(motor1move, motor2move)
+	b.connection.MoveRelativeDouble(motor1move, motor2move)
 
-	b.CurrentPosition = positon
+	b.CurrentPosition = position
 }
