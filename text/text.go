@@ -25,17 +25,22 @@ func (box *BoundingBox) Size() (width float64, height float64) {
 // Writes the string to the coordinates, regardless of anything except
 // out-of-bounds-ness
 func (writer *TextWriter) Write(c ncscreen.Coords, text string) {
+	println(writer.font)
 	for _, char := range text {
-		glyph := writer.font.GetGlyph(char)
-		for _, line := range glyph.Lines {
-			line.Start.X += c.X
-			line.End.X += c.X
-			line.Start.Y += c.Y
-			line.End.Y += c.Y
+		if char == ' ' {
+			c.X += writer.fWidth + .2
+		} else {
+			glyph := writer.font.GetGlyph(char)
+			for _, line := range glyph.Lines {
+				line.Start.X += c.X
+				line.End.X += c.X
+				line.Start.Y += c.Y
+				line.End.Y += c.Y
 
-			writer.target.DrawLine(line)
+				writer.target.DrawLine(line)
+			}
+			c.X += writer.fWidth + .1
 		}
-		c.X += writer.fWidth + .1
 	}
 }
 
@@ -58,9 +63,9 @@ func (writer *TextWriter) WriteCharBox(c ncscreen.Coords, rows int,
 	}
 }
 
-func NewTextWriter(font *Font, charW float64, charH float64, b *board.Board) *TextWriter {
+func NewTextWriter(theFont *Font, charW float64, charH float64, b *board.Board) *TextWriter {
 	return &TextWriter{
-		font:    font,
+		font:    theFont,
 		target:  b,
 		fWidth:  charW,
 		fHeight: charH,

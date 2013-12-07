@@ -2,25 +2,51 @@ package board
 
 import (
 	"hackathon/ncscreen"
+	"math"
 )
 
 type Line struct {
 	Start, End ncscreen.Coords
 }
 
+func (l *Line) Split(pieces int) []Line {
+	result := make([]Line, pieces)
+
+	dy := l.End.Y - l.Start.Y
+	dx := l.End.X - l.Start.X
+
+	theta := math.Atan2(dy, dx)
+
+	for i := 0; i < pieces; i++ {
+		result[i] = Line{
+			Start: Coords{
+				X: i * dx * math.Cos(theta),
+				Y: i * dy * math.Sin(theta),
+			},
+			End: Coords{
+				X: (i + 1) * dx * math.Cos(theta),
+				Y: (i + 1) * dy * math.Sin(theta),
+			},
+		}
+	}
+	return result
+}
+
 func (b *Board) DrawLine(l *Line) {
-	// First, make sure that there we don't draw where we don't mean
-	// to.
-	b.SetPenDown(false)
+	for _, segment := range l.Split(50) {
+		// First, make sure that there we don't draw where we don't mean
+		// to.
+		b.SetPenDown(false)
 
-	// Find the nearest end of the line and move the marker to there.
-	near, far := l.FindNearerTo(b.CurrentPosition)
-	b.MoveTo(near)
+		// Find the nearest end of the line and move the marker to there.
+		near, far := segment.FindNearerTo(b.CurrentPosition)
+		b.MoveTo(near)
 
-	// Draw the line.
-	b.SetPenDown(true)
-	b.MoveTo(far)
-	b.SetPenDown(false)
+		// Draw the line.
+		b.SetPenDown(true)
+		b.MoveTo(far)
+		b.SetPenDown(false)
+	}
 }
 
 func (l *Line) FindNearerTo(c ncscreen.Coords) (near, far ncscreen.Coords) {
