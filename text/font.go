@@ -85,5 +85,5 @@ func LoadFont(fileName string) (result *Font, err error) {
 		}
 	}
 
-	return nil, nil
+	return &font, nil
 }

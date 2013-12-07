@@ -41,6 +41,7 @@ func main() {
 	}
 
 	theFont, err := text.LoadFont("text/font.json")
+
 	if err != nil {
 		fmt.Printf("Unable to load font: %s", err.Error())
 	} else {
