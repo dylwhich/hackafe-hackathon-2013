@@ -15,17 +15,19 @@ func (l *Line) Split(pieces int) []Line {
 	dy := l.End.Y - l.Start.Y
 	dx := l.End.X - l.Start.X
 
+	length := ncscreen.Distance(l.Start, l.End) / pieces
+
 	theta := math.Atan2(dy, dx)
 
 	for i := 0; i < pieces; i++ {
 		result[i] = Line{
 			Start: ncscreen.Coords{
-				X: float64(i) * dx * math.Cos(theta),
-				Y: float64(i) * dy * math.Sin(theta),
+				X: float64(i) * length * math.Cos(theta),
+				Y: float64(i) * length * math.Sin(theta),
 			},
 			End: ncscreen.Coords{
-				X: (float64(i) + 1.0) * dx * math.Cos(theta),
-				Y: (float64(i) + 1.0) * dy * math.Sin(theta),
+				X: float64(i+1) * length * math.Cos(theta),
+				Y: float64(i+1) * length * math.Sin(theta),
 			},
 		}
 	}
