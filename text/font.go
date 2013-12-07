@@ -2,6 +2,7 @@ package text
 
 import (
 	"encoding/json"
+	"errors"
 	"hackathon/board"
 	"hackathon/ncscreen"
 	"os"
@@ -33,7 +34,7 @@ func LoadFont(fileName string) (result *Font, err error) {
 	defer file.Close()
 
 	v := make(map[string]interface{}, 0)
-	err = json.NewDecoder(file).Decode(v)
+	err = json.NewDecoder(file).Decode(&v)
 	if err != nil {
 		print("Unable to decode json: " + err.Error())
 		return nil, err
@@ -44,7 +45,7 @@ func LoadFont(fileName string) (result *Font, err error) {
 	for key, val := range v {
 		obj, ok := val.(map[string][]float64)
 		if !ok {
-			panic("Can't cast this font")
+			return nil, errors.New("Could not cast to map[string][]float64 at key " + key)
 		}
 
 		if len(obj["x"]) != len(obj["y"]) {

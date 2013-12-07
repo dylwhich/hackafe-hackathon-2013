@@ -7,7 +7,7 @@ import (
 func TestLoadFont(t *testing.T) {
 	result, err := LoadFont("font.json")
 	if err != nil {
-		t.Fail()
+		t.Error(err)
 	}
 
 	if result != nil {
