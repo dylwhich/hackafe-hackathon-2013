@@ -45,14 +45,13 @@ func main() {
 	if err != nil {
 		fmt.Printf("Unable to load font: %s", err.Error())
 	} else {
-		writer := text.NewTextWriter(theFont, 1.5 * 1/39.3701, 1/39.3701, b)
+		writer := text.NewTextWriter(theFont, 1/39.3701, 1.5*1/39.3701, b)
 
-		str := "HELLO WORLD!\n "
+		str := "L3E7 HAXX!\n "
 		strCoord := ncscreen.Coords{0.43, 0.2286}
 		fmt.Printf("Writing \"%s\" at %s\n", str, strCoord)
 
 		writer.Write(strCoord, str)
 
-		
 	}
 }
